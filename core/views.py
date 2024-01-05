@@ -22,4 +22,8 @@ def index(request):
 # sent back to the client, which will display the content in the user's browser.
 
 
+def signup(request):
+    return render(request, 'signup.html')
+
+
 
