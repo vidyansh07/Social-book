@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User, auth
+import json
+from django.contrib import messages
+from django.http import HttpResponse
 
 # render() function, which is used to send back an HttpResponse object with the
 # content of the template rendered with the given context.
@@ -23,7 +27,33 @@ def index(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    if request.method =="POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        password2 = request.POST["password2"]
+        
+        
+        if password == password2:
+            if User.objects.filter(email = email).exists():
+                messages.info(request, "Email already exist")
+                return render(request, 'signup')
+            elif User.objects.filter(username=username).exists():
+                messages.info(request, "Username already exist")
+                return render(request, 'signup')
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+                messages.info(request, "User Created")
+        
+        else:
+            messages.info(request, "Password not Matched")
+            return render(request, 'signup')
+        
+        
+    else:
+        return render(request, 'signup.html')
+    
 
 
 
