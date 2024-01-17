@@ -50,10 +50,21 @@ def signup(request):
             messages.info(request, "Password not Matched")
             return render(request, 'signup')
         
+            # log user in and redirect to setting page
+            
+            # Create a profile object for the new user
+            user_model = User.objects.get(username = username)
+            new_profile = Profile.objects.create(user= user_model, id_user = user_model.id)
+            new_profile.save()
+            return  redirct('login')
         
     else:
         return render(request, 'signup.html')
     
+    
+def login(request):
+    return render(request, 'signin.html')
+            
 
 
 
