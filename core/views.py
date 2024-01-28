@@ -45,6 +45,12 @@ def signup(request):
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
                 messages.info(request, "User Created")
+                
+                user_model = User.objects.get(username = username)
+                new_profile = Profile.objects.create(user= user_model, id_user = user_model.id)
+                new_profile.save()
+                return  redirect('signup')
+                    
         
         else:
             messages.info(request, "Password not Matched")
@@ -53,10 +59,7 @@ def signup(request):
             # log user in and redirect to setting page
             
             # Create a profile object for the new user
-            user_model = User.objects.get(username = username)
-            new_profile = Profile.objects.create(user= user_model, id_user = user_model.id)
-            new_profile.save()
-            return  redirct('login')
+          
         
     else:
         return render(request, 'signup.html')
